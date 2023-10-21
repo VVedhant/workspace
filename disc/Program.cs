@@ -3,9 +3,48 @@
 using System.Data.SqlClient;
 using System;
 using System.Data;
+AddDisconnect();
 ShowDisconnect();
 //AddRecord();
 //Show();
+void AddDisconnect()
+{
+    string connectionString = "User ID=sa;password=examlyMssql@123; server=localhost;Database=products;trusted_connection=false;Persist Security Info=False;Encrypt=False";
+    string cmdtext = "insert into mydata values(@Id, @Name, @Price, @Stock)";
+    System.Console.WriteLine("Enter ID");
+    int Id = Convert.ToInt32(Console.ReadLine());
+    System.Console.WriteLine("Enter Item name");
+    string Name = Console.ReadLine();
+    System.Console.WriteLine("Enter Price");
+    int Price = Convert.ToInt32(Console.ReadLine());
+    System.Console.WriteLine("Enter stock");
+    int Stock = Convert.ToInt32(Console.ReadLine());
+    SqlConnection connection = null;
+    SqlDataAdapter adapter = null;
+    DataSet ds = null;
+    DataTable mdTable = null;
+    try{
+        ds = new DataSet();
+        connection = new  SqlConnection(connectionString);
+        adapter = new SqlDataAdapter("select * from mydata", connection);
+        adapter.Fill(ds, "md");
+        mdTable = ds.Tables["md"];
+        DataRow mdRow = mdTable.NewRow();
+        mdRow["Id"] = Id;
+        mdRow["Name"] = Name;
+        mdRow["Price"] = Price;
+        mdRow["Stock"] = Stock;
+        mdTable.Rows.Add(mdRow);
+        SqlCommandBuilder scb = new SqlCommandBuilder(adapter);
+        System.Console.WriteLine(scb.GetInsertCommand().CommandText);
+        adapter.Update(mdTable);
+        System.Console.WriteLine("Row added");
+    }
+    catch(Exception ex)
+    {
+        System.Console.WriteLine(ex.Message);
+    }
+}
 void ShowDisconnect()
 {
     string connectionString = "User ID=sa;password=examlyMssql@123; server=localhost;Database=products;trusted_connection=false;Persist Security Info=False;Encrypt=False";

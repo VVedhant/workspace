@@ -16,4 +16,13 @@ public class ProductController:Controller
             prodTable.Load(reader);
             return View(prodTable);
     }
+    public IActionResult Create()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult Create (int id, stringname, int price, int stock)
+    {
+        return View();
+    }
 }
